@@ -1,4 +1,11 @@
+
+
+
 <div class="container">
+    <div>
+        <app-nav-bar></app-nav-bar>
+      </div>
+  
   <div class="list-group">
     <a class="list-group-item" *ngFor="let problem of problems" 
     [routerLink]="['/problems',problem.id]">

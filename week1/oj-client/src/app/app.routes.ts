@@ -18,7 +18,8 @@ const routes : Routes = [
     },
     {
         path: "**",
-        redirectTo: "problem"
+        redirectTo: "problems"
     }
+
 ]
 export const routing = RouterModule.forRoot( routes );
