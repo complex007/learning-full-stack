@@ -200,7 +200,7 @@ var routing = _angular_router__WEBPACK_IMPORTED_MODULE_0__["RouterModule"].forRo
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "@media screen {\n    #editor{\n        height:600px;\n        width:100%;\n        border:solid;\n    }\n}"
+module.exports = "@media screen {\n    #editor{\n        height:600px;\n        width:100%;\n    }\n}"
 
 /***/ }),
 
@@ -211,7 +211,7 @@ module.exports = "@media screen {\n    #editor{\n        height:600px;\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n    <header class=\"editor-header\">\n      <div class=\"row\">\n        <select class=\"form-control pull-left lang-select\" name=\"language\"\n          [(ngModel)]=\"language\" (change)=\"setLanguage(language)\">\n        <option *ngFor=\"let language of languages\" [value]=\"language\">\n          {{language}}\n        </option>\n        </select>\n        <!--reset button -->\n        <!-- Button trigger modal -->\n        <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#myModal\">\n          Reset\n        </button>\n  \n        <!-- Modal -->\n        <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n          <div class=\"modal-dialog\" role=\"document\">\n            <div class=\"modal-content\">\n              <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"exampleModalLabel\">Are you sure</h5>\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                  <span aria-hidden=\"true\">&times;</span>\n                </button>\n              </div>\n              <div class=\"modal-body\">\n                You will lose current code in the editor, are you sure?\n              </div>\n              <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\n                <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\"\n                (click)=\"resetEditor()\">Reset</button>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </header>\n  \n    <div id=\"editor\">\n    </div><!-- This is the body -->\n    \n    <footer class=\"editor-footer\">\n        <button type=\"button\" class=\"btn btn-success pull-right\" \n        (click)=\"submit()\">Submit Solution</button>\n    </footer>\n  </section>\n\n"
+module.exports = "<section>\n    <header class=\"editor-header\">\n      <div class=\"row\">\n        <div class=\"row\">\n            <select class=\"form-control pull-left lang-select\" name=\"language\"\n            [(ngModel)]=\"language\" (change)=\"setLanguage(language)\">\n            <option *ngFor=\"let language of languages\" [value]=\"language\">\n              {{language}}\n            </option>\n            </select>\n            <!--reset button -->\n            <!-- Button trigger modal -->\n            <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#myModal\">\n              Reset\n            </button>\n        </div>\n        \n  \n        <!-- Modal -->\n        <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n          <div class=\"modal-dialog\" role=\"document\">\n            <div class=\"modal-content\">\n              <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"exampleModalLabel\">Are you sure</h5>\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                  <span aria-hidden=\"true\">&times;</span>\n                </button>\n              </div>\n              <div class=\"modal-body\">\n                You will lose current code in the editor, are you sure?\n              </div>\n              <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\n                <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\"\n                (click)=\"resetEditor()\">Reset</button>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </header>\n  \n    <div id=\"editor\">\n    </div><!-- This is the body -->\n    \n    <footer class=\"editor-footer\">\n        <button type=\"button\" class=\"btn btn-success pull-right\" \n        (click)=\"submit()\">Submit Solution</button>\n    </footer>\n  </section>\n\n"
 
 /***/ }),
 
@@ -248,14 +248,16 @@ var EditorComponent = /** @class */ (function () {
         this.defaultContent = {
             'Java': "public class Example{\n      public static void main(string[] args){\n        // type your code\n      }\n    }\n    " // ` support mutiple lines string
             ,
-            'Python': "public class Example{\n      public static void main(string[] args){\n        // type your code\n      }\n    }"
+            'Python': "class Solution:\n    def example();\n      # Write your Python code here\n    "
         };
+        this.language = 'Java';
     }
     EditorComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.params.subscribe(function (params) {
             _this.sessionId = params['id'];
             _this.initEditor();
+            _this.resetEditor();
             _this.collaboration.restoreBuffer();
         });
     };
@@ -263,8 +265,6 @@ var EditorComponent = /** @class */ (function () {
         var _this = this;
         this.editor = ace.edit("editor");
         this.editor.setTheme("ace/theme/eclipse");
-        this.editor.getSession().setMode("ace/mode/java");
-        this.editor.setValue(this.defaultContent['Java']);
         document.getElementsByTagName('textarea')[0].focus(); // focus on a certain area
         this.collaboration.init(this.editor, this.sessionId); // keep clients editing same problem in same session
         this.editor.lastAppliedChange = null;
@@ -274,6 +274,14 @@ var EditorComponent = /** @class */ (function () {
                 _this.collaboration.change(JSON.stringify(e));
             }
         });
+    };
+    EditorComponent.prototype.setLanguage = function (language) {
+        this.language = language;
+        this.resetEditor();
+    };
+    EditorComponent.prototype.resetEditor = function () {
+        this.editor.setValue(this.defaultContent[this.language]);
+        this.editor.getSession().setMode("ace/mode/" + this.language.toLowerCase());
     };
     EditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -471,7 +479,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div class=\"col-sm-12 col-md-4\">\n    <div>\n      <h2>\n        {{problem.id}}.{{problem.name}}\n      </h2>\n      <p>\n        {{problem.desc}}\n      </p>\n    </div>\n    <div class=\"hidden-xs col-sm-12 col-md-8\">\n      <app-editor></app-editor>\n    </div>\n  </div>\n\n</div>"
+module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div>\n    <div class=\"col-sm-12 col-md-4\" >\n      <h2>\n        {{problem.id}}.{{problem.name}}\n      </h2>\n      <p>\n        {{problem.desc}}\n      </p>\n    </div>\n    <div class=\"hidden-xs col-sm-12 col-md-8\">\n      <app-editor></app-editor>\n    </div>\n  </div>\n\n</div>"
 
 /***/ }),
 
@@ -673,7 +681,7 @@ var CollaborationService = /** @class */ (function () {
     }
     CollaborationService.prototype.init = function (editor, sessionId) {
         this.collaborationSocket = io(window.location.origin, { query: 'sessionId=' + sessionId });
-        this.collaborationSocket.on('message', function (message) {
+        this.collaborationSocket.on('connection', function (message) {
             console.log("message received from server: " + message);
         });
         this.collaborationSocket.on('change', function (delta) {

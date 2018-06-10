@@ -18,12 +18,12 @@ export class EditorComponent implements OnInit {
       }
     }
     `// ` support mutiple lines string
-    ,'Python':`public class Example{
-      public static void main(string[] args){
-        // type your code
-      }
-    }`
+    ,'Python':`class Solution:
+    def example();
+      # Write your Python code here
+    `
   }
+  language: string = 'Java';
   sessionId:string;
 
   constructor( private collaboration:CollaborationService , private route:ActivatedRoute) { }
@@ -33,6 +33,7 @@ export class EditorComponent implements OnInit {
     this.route.params.subscribe(params=>{
       this.sessionId = params['id'];
       this.initEditor();
+      this.resetEditor();
       this.collaboration.restoreBuffer();
     })
   
@@ -40,8 +41,6 @@ export class EditorComponent implements OnInit {
   initEditor(): void{
     this.editor = ace.edit("editor");
     this.editor.setTheme("ace/theme/eclipse");
-    this.editor.getSession().setMode("ace/mode/java");
-    this.editor.setValue(this.defaultContent['Java']);
     document.getElementsByTagName('textarea')[0].focus();// focus on a certain area
     this.collaboration.init(this.editor,this.sessionId);// keep clients editing same problem in same session
     this.editor.lastAppliedChange = null;
@@ -51,6 +50,16 @@ export class EditorComponent implements OnInit {
         this.collaboration.change(JSON.stringify(e));
       }
     });
+  }
+  setLanguage(language:string): void {
+    this.language = language;
+    this.resetEditor();
+
+  }
+  resetEditor(): void{
+    this.editor.setValue(this.defaultContent[this.language]);
+    this.editor.getSession().setMode("ace/mode/"+this.language.toLowerCase());
+
   }
 
 }
