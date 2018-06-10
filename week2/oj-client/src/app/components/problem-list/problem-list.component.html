@@ -4,7 +4,7 @@
 <div class="container">
   
   <div class="list-group">
-    <a class="list-group-item" *ngFor="let problem of problems" 
+    <a class="list-group-item" *ngFor="let problem of (problems|search:searchTerm)" 
     [routerLink]="['/problems',problem.id]">
       <span class="{{'pull-left label difficulty diff-'+problem.difficulty.toLocaleLowerCase()}}">
           {{problem.difficulty}}

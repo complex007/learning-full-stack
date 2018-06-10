@@ -2,17 +2,17 @@
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <span class="navbar-brand">Forerror</span>
+        <span class="navbar-brand">{{title}}</span>
       </div>
   
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a [routerLink]="['/problems']">List</a></li>
+          <li><a [routerLink]="['/problems']">List</a></li>
         </ul>
         <form class="navbar-form navbar-left">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" type="search" class="form-control" [formControl]="searchBox" placeholder="Search">
           </div>
         </form>
         <ul class="nav navbar-nav navbar-right">

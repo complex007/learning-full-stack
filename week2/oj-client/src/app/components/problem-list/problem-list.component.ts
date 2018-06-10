@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Problem } from 'src/app/models/problem.model';
-import { DataService } from 'src/app/services/data.service' 
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Problem } from '../../models/problem.model';
+import { DataService } from '../../services/data.service' ;
+import { Subscription } from 'rxjs';
+import { InputService } from '../../services/input.service'
 
 @Component({
   selector: 'app-problem-list',
@@ -9,14 +11,29 @@ import { DataService } from 'src/app/services/data.service'
 })
 export class ProblemListComponent implements OnInit {
   problems: Problem[];
+  subscriptionProblems: Subscription;
 
-  constructor(private dataService: DataService ) { }
+  subscriptionSearch: Subscription;
+  searchTerm: string = '';
+
+  constructor(private dataService: DataService, private input: InputService ) { }
 
   ngOnInit() {
     this.getProblems();
+    this.getInput();
   }
-  getProblems(){
-    this.problems = this.dataService.getProblems();
+  ngOnDestroy(){
+    this.subscriptionProblems.unsubscribe();
+    this.subscriptionSearch.unsubscribe();
+  }
+  getProblems(): void{
+    this.subscriptionProblems = this.dataService.getProblems().subscribe(problems=>this.problems=problems)
+  }
+  getInput():void{
+    this.subscriptionSearch = this.input.getInput().subscribe(term=>this.searchTerm = term);
   }
 
+
+
+  //  | is pipe. a | b ,a ,b is the params of the pipe function
 }

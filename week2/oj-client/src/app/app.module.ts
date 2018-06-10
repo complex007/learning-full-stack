@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {  HttpClientModule } from '@angular/common/http'
-import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -10,7 +10,8 @@ import { ProblemDetailComponent } from './components/problem-detail/problem-deta
 import { routing } from './app.routes';
 import { NewProblemComponent } from './components/new-problem/new-problem.component'
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-
+import { EditorComponent } from './components/editor/editor.component';
+import { SearchPipe } from './pipes/search.pipe';
 
 
 @NgModule({
@@ -19,12 +20,15 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
     ProblemListComponent,
     ProblemDetailComponent,
     NewProblemComponent,
-    NavBarComponent
+    NavBarComponent,
+    EditorComponent,
+    SearchPipe
   ],
   imports: [
     BrowserModule,
     routing,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule
   ],
   providers: [],
