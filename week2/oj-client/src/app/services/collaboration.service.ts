@@ -12,7 +12,10 @@ export class CollaborationService {
     this.collaborationSocket = io(window.location.origin,
       {query:'sessionId='+sessionId});
 
-    this.collaborationSocket.on('connection',message=>{
+      
+      this.collaborationSocket = io(window.location.origin, { query: 'message=haha'});
+
+    this.collaborationSocket.on('message',message=>{
       console.log("message received from server: " + message);
     })
 

@@ -34,6 +34,7 @@ export class EditorComponent implements OnInit {
       this.sessionId = params['id'];
       this.initEditor();
       this.resetEditor();
+      this.collaboration.init(this.editor,this.sessionId);
       this.collaboration.restoreBuffer();
     })
   
@@ -45,10 +46,13 @@ export class EditorComponent implements OnInit {
     this.collaboration.init(this.editor,this.sessionId);// keep clients editing same problem in same session
     this.editor.lastAppliedChange = null;
     this.editor.on("change",(e)=>{
-      console.log('editor changes: '+ JSON.stringify(e));
+      // console.log('editor changes: '+ JSON.stringify(e));
       if (this.editor.lastAppliedChange != e){  // many changes are same if avoid dead loop 
         this.collaboration.change(JSON.stringify(e));
       }
+    });
+    this.editor.on("message",(e)=>{
+      console.log('editor change');
     });
   }
   setLanguage(language:string): void {

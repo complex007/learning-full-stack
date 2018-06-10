@@ -258,6 +258,7 @@ var EditorComponent = /** @class */ (function () {
             _this.sessionId = params['id'];
             _this.initEditor();
             _this.resetEditor();
+            _this.collaboration.init(_this.editor, _this.sessionId);
             _this.collaboration.restoreBuffer();
         });
     };
@@ -269,10 +270,13 @@ var EditorComponent = /** @class */ (function () {
         this.collaboration.init(this.editor, this.sessionId); // keep clients editing same problem in same session
         this.editor.lastAppliedChange = null;
         this.editor.on("change", function (e) {
-            console.log('editor changes: ' + JSON.stringify(e));
+            // console.log('editor changes: '+ JSON.stringify(e));
             if (_this.editor.lastAppliedChange != e) {
                 _this.collaboration.change(JSON.stringify(e));
             }
+        });
+        this.editor.on("message", function (e) {
+            console.log('editor change');
         });
     };
     EditorComponent.prototype.setLanguage = function (language) {
@@ -681,7 +685,8 @@ var CollaborationService = /** @class */ (function () {
     }
     CollaborationService.prototype.init = function (editor, sessionId) {
         this.collaborationSocket = io(window.location.origin, { query: 'sessionId=' + sessionId });
-        this.collaborationSocket.on('connection', function (message) {
+        this.collaborationSocket = io(window.location.origin, { query: 'message=haha' });
+        this.collaborationSocket.on('message', function (message) {
             console.log("message received from server: " + message);
         });
         this.collaborationSocket.on('change', function (delta) {
