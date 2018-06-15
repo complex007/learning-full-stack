@@ -5,6 +5,12 @@ import { Observable,BehaviorSubject } from 'rxjs'
   providedIn: 'root'
 })
 export class InputService {
+  //use service to pass data across components
+  // no need to forcely pass data via components data binding
+
+  // like a database, temporally store data
+
+
   private inputSubject$ = new BehaviorSubject('');
 
 

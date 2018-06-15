@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable,BehaviorSubject } from 'rxjs'
+
 declare var io:any;
 
 @Injectable({
@@ -6,18 +8,22 @@ declare var io:any;
 })
 export class CollaborationService {
   collaborationSocket:any;
+  private collaborationInfo = new BehaviorSubject([]);
 
   constructor() { }
   init(editor:any,sessionId:string): void{
     this.collaborationSocket = io(window.location.origin,
       {query:'sessionId='+sessionId});
-
       
-      this.collaborationSocket = io(window.location.origin, { query: 'message=haha'});
+    // this.collaborationSocket = io(window.location.origin, { query: 'message=haha&sessionId='+sessionId});
 
-    this.collaborationSocket.on('message',message=>{
-      console.log("message received from server: " + message);
+    // this.collaborationSocket.on('message',message=>{
+    //   console.log("message received from server: " + message);
+    // })
+    this.collaborationSocket.on('collaboration-info', collaboration=>{
+      this.changeEditors(collaboration);
     })
+   
 
   
     this.collaborationSocket.on('change',(delta:string)=>{
@@ -34,4 +40,16 @@ export class CollaborationService {
   restoreBuffer():void{
     this.collaborationSocket.emit('restoreBuffer');
   }
+
+  closeSocket():void{
+    this.collaborationSocket.disconnect();
+  }
+
+  changeEditors( editors:string[] ):void{
+    this.collaborationInfo.next(editors);
+  }
+  getEditors(): Observable<string[]>{
+    return this.collaborationInfo.asObservable();
+  }
+  
 }

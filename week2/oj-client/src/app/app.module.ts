@@ -12,6 +12,7 @@ import { NewProblemComponent } from './components/new-problem/new-problem.compon
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { SearchPipe } from './pipes/search.pipe';
+import { DisplayEditorsComponent } from './components/editor/display-editors/display-editors.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { SearchPipe } from './pipes/search.pipe';
     NewProblemComponent,
     NavBarComponent,
     EditorComponent,
-    SearchPipe
+    SearchPipe,
+    DisplayEditorsComponent
   ],
   imports: [
     BrowserModule,

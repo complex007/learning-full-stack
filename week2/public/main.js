@@ -103,12 +103,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_nav_bar_nav_bar_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/nav-bar/nav-bar.component */ "./src/app/components/nav-bar/nav-bar.component.ts");
 /* harmony import */ var _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/editor/editor.component */ "./src/app/components/editor/editor.component.ts");
 /* harmony import */ var _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pipes/search.pipe */ "./src/app/pipes/search.pipe.ts");
+/* harmony import */ var _components_editor_display_editors_display_editors_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/editor/display-editors/display-editors.component */ "./src/app/components/editor/display-editors/display-editors.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -133,7 +135,8 @@ var AppModule = /** @class */ (function () {
                 _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_8__["NewProblemComponent"],
                 _components_nav_bar_nav_bar_component__WEBPACK_IMPORTED_MODULE_9__["NavBarComponent"],
                 _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_10__["EditorComponent"],
-                _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_11__["SearchPipe"]
+                _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_11__["SearchPipe"],
+                _components_editor_display_editors_display_editors_component__WEBPACK_IMPORTED_MODULE_12__["DisplayEditorsComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -193,6 +196,83 @@ var routing = _angular_router__WEBPACK_IMPORTED_MODULE_0__["RouterModule"].forRo
 
 /***/ }),
 
+/***/ "./src/app/components/editor/display-editors/display-editors.component.css":
+/*!*********************************************************************************!*\
+  !*** ./src/app/components/editor/display-editors/display-editors.component.css ***!
+  \*********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".editor-ui{\n    background-color: #4CAF50;\n    width:60px;\n    margin: 2px 3px 2px 3px;\n}\n#display-editor{\n    display: flex;\n    flex-direction: row;\n}"
+
+/***/ }),
+
+/***/ "./src/app/components/editor/display-editors/display-editors.component.html":
+/*!**********************************************************************************!*\
+  !*** ./src/app/components/editor/display-editors/display-editors.component.html ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<label> Editing Users:</label>\n    \n<div id=\"display-editor\">\n       \n        <div *ngFor=\"let editor of editors\" >\n                <span class=\"badge editor-ui\">user-{{editor.substring(0,1)}}</span>\n        </div>\n</div>\n\n"
+
+/***/ }),
+
+/***/ "./src/app/components/editor/display-editors/display-editors.component.ts":
+/*!********************************************************************************!*\
+  !*** ./src/app/components/editor/display-editors/display-editors.component.ts ***!
+  \********************************************************************************/
+/*! exports provided: DisplayEditorsComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DisplayEditorsComponent", function() { return DisplayEditorsComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_collaboration_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/collaboration.service */ "./src/app/services/collaboration.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var DisplayEditorsComponent = /** @class */ (function () {
+    function DisplayEditorsComponent(collaboration) {
+        this.collaboration = collaboration;
+    }
+    DisplayEditorsComponent.prototype.ngOnInit = function () {
+        this.getEditors();
+    };
+    DisplayEditorsComponent.prototype.ngOnDestroy = function () {
+        this.subscriptionEditors.unsubscribe();
+    };
+    DisplayEditorsComponent.prototype.getEditors = function () {
+        var _this = this;
+        this.subscriptionEditors = this.collaboration.getEditors()
+            .subscribe(function (editors) {
+            _this.editors = editors;
+        });
+    };
+    DisplayEditorsComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-display-editors',
+            template: __webpack_require__(/*! ./display-editors.component.html */ "./src/app/components/editor/display-editors/display-editors.component.html"),
+            styles: [__webpack_require__(/*! ./display-editors.component.css */ "./src/app/components/editor/display-editors/display-editors.component.css")]
+        }),
+        __metadata("design:paramtypes", [_services_collaboration_service__WEBPACK_IMPORTED_MODULE_1__["CollaborationService"]])
+    ], DisplayEditorsComponent);
+    return DisplayEditorsComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/components/editor/editor.component.css":
 /*!********************************************************!*\
   !*** ./src/app/components/editor/editor.component.css ***!
@@ -200,7 +280,7 @@ var routing = _angular_router__WEBPACK_IMPORTED_MODULE_0__["RouterModule"].forRo
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "@media screen {\n    #editor{\n        height:600px;\n        width:100%;\n    }\n}"
+module.exports = "@media screen {\n    #editor{\n        height:600px;\n        width:100%;\n       \n    }\n    #header-content{\n        display:flex;\n        flex-direction: row;\n        margin: 10px 0 10px 0;\n    }\n    #header-content select{\n        width: 70px;\n\n    }\n}"
 
 /***/ }),
 
@@ -211,7 +291,7 @@ module.exports = "@media screen {\n    #editor{\n        height:600px;\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n    <header class=\"editor-header\">\n      <div class=\"row\">\n        <div class=\"row\">\n            <select class=\"form-control pull-left lang-select\" name=\"language\"\n            [(ngModel)]=\"language\" (change)=\"setLanguage(language)\">\n            <option *ngFor=\"let language of languages\" [value]=\"language\">\n              {{language}}\n            </option>\n            </select>\n            <!--reset button -->\n            <!-- Button trigger modal -->\n            <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#myModal\">\n              Reset\n            </button>\n        </div>\n        \n  \n        <!-- Modal -->\n        <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n          <div class=\"modal-dialog\" role=\"document\">\n            <div class=\"modal-content\">\n              <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"exampleModalLabel\">Are you sure</h5>\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                  <span aria-hidden=\"true\">&times;</span>\n                </button>\n              </div>\n              <div class=\"modal-body\">\n                You will lose current code in the editor, are you sure?\n              </div>\n              <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\n                <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\"\n                (click)=\"resetEditor()\">Reset</button>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </header>\n  \n    <div id=\"editor\">\n    </div><!-- This is the body -->\n    \n    <footer class=\"editor-footer\">\n        <button type=\"button\" class=\"btn btn-success pull-right\" \n        (click)=\"submit()\">Submit Solution</button>\n    </footer>\n  </section>\n\n"
+module.exports = "<section>\n  <app-display-editors></app-display-editors>\n    <header class=\"editor-header\">\n      <div class=\"row\">\n        <div id=\"header-content\">\n            <select class=\"form-control pull-left lang-select\" name=\"language\" \n            [(ngModel)]=\"language\" (change)=\"setLanguage(language)\">\n              <option *ngFor=\"let language of languages\" [value]=\"language\">\n                {{language}}\n              </option>\n            </select>\n            <!--reset button -->\n            <!-- Button trigger modal -->\n            <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#myModal\">\n              Reset\n            </button>\n        </div>\n        \n  \n        <!-- Modal -->\n        <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n          <div class=\"modal-dialog\" role=\"document\">\n            <div class=\"modal-content\">\n              <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"exampleModalLabel\">Are you sure</h5>\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                  <span aria-hidden=\"true\">&times;</span>\n                </button>\n              </div>\n              <div class=\"modal-body\">\n                You will lose current code in the editor, are you sure?\n              </div>\n              <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\n                <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\"\n                (click)=\"resetEditor()\">Reset</button>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </header>\n  \n    <div id=\"editor\">\n    </div><!-- This is the body -->\n    \n    <footer class=\"editor-footer\">\n        <button type=\"button\" class=\"btn btn-success pull-right\" \n        (click)=\"submit()\">Submit Solution</button>\n    </footer>\n</section>\n\n"
 
 /***/ }),
 
@@ -258,7 +338,6 @@ var EditorComponent = /** @class */ (function () {
             _this.sessionId = params['id'];
             _this.initEditor();
             _this.resetEditor();
-            _this.collaboration.init(_this.editor, _this.sessionId);
             _this.collaboration.restoreBuffer();
         });
     };
@@ -270,14 +349,13 @@ var EditorComponent = /** @class */ (function () {
         this.collaboration.init(this.editor, this.sessionId); // keep clients editing same problem in same session
         this.editor.lastAppliedChange = null;
         this.editor.on("change", function (e) {
-            // console.log('editor changes: '+ JSON.stringify(e));
             if (_this.editor.lastAppliedChange != e) {
                 _this.collaboration.change(JSON.stringify(e));
             }
         });
-        this.editor.on("message", function (e) {
-            console.log('editor change');
-        });
+    };
+    EditorComponent.prototype.ngOnDestroy = function () {
+        this.collaboration.closeSocket();
     };
     EditorComponent.prototype.setLanguage = function (language) {
         this.language = language;
@@ -670,6 +748,7 @@ var SearchPipe = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CollaborationService", function() { return CollaborationService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -680,14 +759,20 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var CollaborationService = /** @class */ (function () {
     function CollaborationService() {
+        this.collaborationInfo = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"]([]);
     }
     CollaborationService.prototype.init = function (editor, sessionId) {
+        var _this = this;
         this.collaborationSocket = io(window.location.origin, { query: 'sessionId=' + sessionId });
-        this.collaborationSocket = io(window.location.origin, { query: 'message=haha' });
-        this.collaborationSocket.on('message', function (message) {
-            console.log("message received from server: " + message);
+        // this.collaborationSocket = io(window.location.origin, { query: 'message=haha&sessionId='+sessionId});
+        // this.collaborationSocket.on('message',message=>{
+        //   console.log("message received from server: " + message);
+        // })
+        this.collaborationSocket.on('collaboration-info', function (collaboration) {
+            _this.changeEditors(collaboration);
         });
         this.collaborationSocket.on('change', function (delta) {
             console.log("collobration: editor changed by " + delta);
@@ -701,6 +786,15 @@ var CollaborationService = /** @class */ (function () {
     };
     CollaborationService.prototype.restoreBuffer = function () {
         this.collaborationSocket.emit('restoreBuffer');
+    };
+    CollaborationService.prototype.closeSocket = function () {
+        this.collaborationSocket.disconnect();
+    };
+    CollaborationService.prototype.changeEditors = function (editors) {
+        this.collaborationInfo.next(editors);
+    };
+    CollaborationService.prototype.getEditors = function () {
+        return this.collaborationInfo.asObservable();
     };
     CollaborationService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
@@ -819,6 +913,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var InputService = /** @class */ (function () {
     function InputService() {
+        //use service to pass data across components
+        // no need to forcely pass data via components data binding
+        // like a database, temporally store data
         this.inputSubject$ = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"]('');
     }
     InputService.prototype.changeInput = function (term) {
