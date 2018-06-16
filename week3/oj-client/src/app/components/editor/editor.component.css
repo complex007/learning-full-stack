@@ -1,0 +1,19 @@
+@media screen {
+    #editor{
+        height:600px;
+        width:100%;
+       
+    }
+    #header-content{
+        display:flex;
+        flex-direction: row;
+        margin: 10px 0 10px 0;
+    }
+    #header-content select{
+        width: 70px;
+
+    }
+    .output-info{
+        border:solid;
+    }
+}
