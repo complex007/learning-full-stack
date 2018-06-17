@@ -76,7 +76,8 @@ export class EditorComponent implements OnInit {
   }
   submit(): void{
     let code = this.editor.getValue();
-    this.dataService.buildAndRun(code)
+    let lang = this.language;
+    this.dataService.buildAndRun(code,lang)
     .then(data =>{
       this.output = data;
     })

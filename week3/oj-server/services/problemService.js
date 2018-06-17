@@ -92,6 +92,7 @@ const updateProblem = function( name, changedProblem ){
                 let foundId = problem._id;
                 delete changedProblem._id;
                 delete changedProblem.name;
+                delete changedProblem.__v;
                 ProblemModel.update({_id:foundId},{$set:changedProblem})
                 .then((pro)=>{
                     resolve(pro);
@@ -103,8 +104,9 @@ const updateProblem = function( name, changedProblem ){
 
 }
 
-const build_and_run = function(code){
+const build_and_run = function(code,lang){
     console.log(code);
+    console.log(lang);
     return new Promise(( resolve )=>{
         resolve({status:"ok"});
 

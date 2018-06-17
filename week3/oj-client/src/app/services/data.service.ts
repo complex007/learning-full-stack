@@ -47,8 +47,8 @@ addProblem( problem: Problem ){
   })
   .catch(this.handleError);
 }
-buildAndRun( code: string ): Promise<string> {
-  return this.httpClient.post('api/v1/build_and_run',{code:code})
+buildAndRun( code: string, lang:string ): Promise<string> {
+  return this.httpClient.post('api/v1/build_and_run',{code:code,lang:lang})
   .toPromise()
   .then((res:any)=>{
     return res.status;

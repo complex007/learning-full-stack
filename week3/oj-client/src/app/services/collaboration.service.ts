@@ -8,7 +8,8 @@ declare var io:any;
 })
 export class CollaborationService {
   collaborationSocket:any;
-  private collaborationInfo = new BehaviorSubject([]);
+  private collaborationInfo = new BehaviorSubject([]);//multiple registers,mulity cast, online show,get data when register
+  //obervable:record , get all info
 
   constructor() { }
   init(editor:any,sessionId:string): void{

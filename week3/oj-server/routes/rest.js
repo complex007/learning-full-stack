@@ -25,8 +25,8 @@ router.post('/problems', jsonParser, function( req, res ){
     }); 
 }) 
 
-router.put('/problems/:name', jsonParser, function( req, res ){
-    const name = req.params.name;
+router.put('/problems', jsonParser, function( req, res ){
+    const name = req.body.name;
     if( !req.body.name || (req.body.name && req.body.name == name)){
         problemService.updateProblem( name, req.body )    
         .then( data => {res.json(data)}, // reture whole problem with generated id
@@ -42,7 +42,8 @@ router.put('/problems/:name', jsonParser, function( req, res ){
 
 router.post('/build_and_run',jsonParser,function(req,res){
     let code = req.body.code;
-    problemService.build_and_run(code)
+    let lang = req.body.lang;
+    problemService.build_and_run(code,lang)
     .then(data=>{res.json(data)}),
     (error)=>{
         res.status(400).send("Problem name not exists")
