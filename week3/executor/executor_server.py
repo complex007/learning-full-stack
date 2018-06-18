@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask,request,jsonify
+# jsonify is used for serialization
 import json
 app = Flask(__name__)
-from flask import jsonify #use for serialization
 import executor_utils as eu
 
 @app.route('/build_and_run',methods=['POST'])
@@ -12,7 +12,7 @@ def build_and_run():
     code = data['code']
     lang = data['lang']
 
-    print('api got called with code: %s in %s',(code,lang))
+    print('api got called with code: %s in %s' % (code,lang))
 
     result = eu.build_and_run( code, lang )
     return jsonify(result)

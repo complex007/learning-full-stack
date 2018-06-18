@@ -371,7 +371,8 @@ var EditorComponent = /** @class */ (function () {
     EditorComponent.prototype.submit = function () {
         var _this = this;
         var code = this.editor.getValue();
-        this.dataService.buildAndRun(code)
+        var lang = this.language.toLocaleLowerCase();
+        this.dataService.buildAndRun(code, lang)
             .then(function (data) {
             _this.output = data;
         });
@@ -777,8 +778,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var CollaborationService = /** @class */ (function () {
+    //obervable:record , get all info
     function CollaborationService() {
-        this.collaborationInfo = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"]([]);
+        this.collaborationInfo = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"]([]); //multiple registers,mulity cast, online show,get data when register
     }
     CollaborationService.prototype.init = function (editor, sessionId) {
         var _this = this;
@@ -885,8 +887,8 @@ var DataService = /** @class */ (function () {
         })
             .catch(this.handleError);
     };
-    DataService.prototype.buildAndRun = function (code) {
-        return this.httpClient.post('api/v1/build_and_run', { code: code })
+    DataService.prototype.buildAndRun = function (code, lang) {
+        return this.httpClient.post('api/v1/build_and_run', { code: code, lang: lang })
             .toPromise()
             .then(function (res) {
             return res.status;
