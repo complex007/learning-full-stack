@@ -1,7 +1,6 @@
-from cloundAMQP_client import CloudAMQPClient
-
-ClOUDAMQP_URL = "use your own cloud amqp url"
-QUEUE_NAME = "test"
+from cloudAMQP_client import CloudAMQPClient
+ClOUDAMQP_URL = "amqp://mazenwik:z4Eya9CpxocIi_3xw5esvt-RiklxGJi5@spider.rmq.cloudamqp.com/mazenwik"
+QUEUE_NAME = "news"
 
 def test_basic():
     client = CloudAMQPClient(ClOUDAMQP_URL, QUEUE_NAME)
@@ -11,5 +10,6 @@ def test_basic():
     receivedMsg = client.getMessage()
     assert sentMsg == receivedMsg
     print('test_basic passed.')
+    
 if __name__ == "__main__":
     test_basic()

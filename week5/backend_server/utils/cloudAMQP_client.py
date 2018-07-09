@@ -1,4 +1,4 @@
-import log
+import log 
 import pika
 import json
 
@@ -40,4 +40,4 @@ class CloudAMQPClient:
     # blockingConnection.sleep is a safter way to sleep than time.sleep()
     # will respond to server's heartbeat
     def sleep(self, seconds):
-        self.channel.sleep(seconds)
+        self.connection.sleep(seconds)
