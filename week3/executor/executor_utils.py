@@ -20,22 +20,26 @@ CONTAINER_NAME="%s:latest" % IMAGE_NAME
 
 SOURCE_FILE_NAMES = {
     'java':'Example.java',
-    'python':'example.py'
+    'python':'example.py',
+    'c++':'example.cpp'
 }
 
 BINARY_NAMES = {
     'java':'Example',
-    'python':'example.py'
+    'python':'example.py',
+    'c++':'./a.out'
 }
 
 BUILD_COMMANDS = {
     'java':'javac',
-    'python':'python3'
+    'python':'python3',
+    'c++':'g++'
 }
 
 EXECUTE_COMMANDS = {
     'java':'java',
-    'python':'python3'
+    'python':'python3',
+    'c++':''
 }
 
 # load docker image to execute code
@@ -70,52 +74,48 @@ def build_and_run(code,lang):
     # write code in the source_file_host_dir
     with open('%s/%s'%(source_file_host_dir,SOURCE_FILE_NAMES[lang]),'w') as source_file:
         source_file.write(code)
-        # build code
-        try:
-            build_log = client.containers.run(
-                image = IMAGE_NAME,
-                # run this command to build the code
-                command = '%s %s' %( BUILD_COMMANDS[lang], SOURCE_FILE_NAMES[lang] ),
-                # bind the host dir and guest dir, 'rw' = read and write permission of guest dir
-                # docker can access host dir (host dir in app is shared to docker via guest dir )
-                volumes = { source_file_host_dir: { 'bind' : source_file_guest_dir, 'mode': 'rw'} },
-                working_dir = source_file_guest_dir
-            )
-            print("build")
-            build_log = str(build_log,'utf-8')
-            print(build_log)
-            result['build']='OK'
-        except ContainerError as e:
-            #  fail to build, get the error message from container
-            result['error'] = str(e.stderr,'utf-8')
-            # remove host dir
-            shutil.rmtree(source_file_host_dir)
-            print(result)
-            return result
+    # build code
+    try:
+        # run this command to build the code
+        # bind the host dir and guest dir, 'rw' = read and write permission of guest dir
+        # docker can access host dir (host dir in app is shared to docker via guest dir )
 
-        # execute code
-        try:
-            log = client.containers.run(
-                image = IMAGE_NAME,
-                # command = 'find . -name "example*"' ,
-                command = 'java -version' ,
-                # command = 'find . -name "Example*"' ,
-                # command = '%s %s' %( EXECUTE_COMMANDS[lang], BINARY_NAMES[lang] ),
-                volumes = { source_file_host_dir: { 'bind' : source_file_guest_dir, 'mode': 'rw'} },
-                working_dir = source_file_guest_dir
-            )
-            log = str(log,'utf-8')
-            print("run")
-            print(log)
-            result['run'] = log
-        except ContainerError as e:
-            print(e)
-            result['error'] = str(e.stderr,'utf-8')
-            shutil.rmtree(source_file_host_dir)
-            print(result)
-            return result
-
-        # after build and run, clean up dir
+        client.containers.run(
+            image = IMAGE_NAME,
+            command = '%s %s' %( BUILD_COMMANDS[lang], SOURCE_FILE_NAMES[lang] ),
+            volumes = { source_file_host_dir: { 'bind' : source_file_guest_dir, 'mode': 'rw'} },
+            working_dir = source_file_guest_dir
+        )
+        print("build")
+        result['build']='OK'
+    except ContainerError as e:
+        #  fail to build, get the error message from container
+        result['error'] = str(e.stderr,'utf-8')
+        # remove host dir
         shutil.rmtree(source_file_host_dir)
         print(result)
         return result
+
+    # execute code
+    try:
+        log = client.containers.run(
+            image = IMAGE_NAME,
+            command = '%s %s' %( EXECUTE_COMMANDS[lang], BINARY_NAMES[lang] ),
+            volumes = { source_file_host_dir: { 'bind' : source_file_guest_dir, 'mode': 'rw'} },
+            working_dir = source_file_guest_dir
+        )
+        log = str(log,'utf-8')
+        print("run")
+        print(log)
+        result['run'] = "OK"
+    except ContainerError as e:
+        print(e)
+        result['run'] = str(e.stderr,'utf-8')
+        shutil.rmtree(source_file_host_dir)
+        print(result)
+        return result
+
+    # after build and run, clean up dir
+    shutil.rmtree(source_file_host_dir)
+    print(result)
+    return result

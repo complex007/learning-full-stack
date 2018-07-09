@@ -6,6 +6,8 @@ import executor_utils as eu
 
 @app.route('/build_and_run',methods=['POST'])
 def build_and_run():
+    print('build_and_run')
+
     data = request.get_json()
     if 'code' not in data or 'lang' not in data:
         return 'need code and lang '
@@ -19,5 +21,7 @@ def build_and_run():
 
 
 if __name__ == '__main__':
+    import sys
+    port = int(sys.argv[1])
     eu.load_image()
-    app.run(debug=True)
+    app.run( port = port )

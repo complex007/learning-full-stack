@@ -327,11 +327,12 @@ var EditorComponent = /** @class */ (function () {
         this.collaboration = collaboration;
         this.route = route;
         this.dataService = dataService;
-        this.languages = ["Java", "Python"];
+        this.languages = ["Java", "Python", "C++"];
         this.defaultContent = {
-            'Java': "public class Example{\n      public static void main(string[] args){\n        // type your code\n      }\n    }\n    " // ` support mutiple lines string
+            'Java': "public class Example{\n      public static void main(String[] args){\n        // type your code\n      }\n    }\n    " // ` support mutiple lines string
             ,
-            'Python': "class Solution:\n    def example();\n      # Write your Python code here\n    "
+            'Python': "class Solution:\n    def example():\n      print(\"test\")\n      # Write your Python code here\n    ",
+            "C++": "#include <iostream>\n     \n    int main()\n    {\n      std::cout << \"Hello World!\" << std::endl;\n      return 0;\n    }"
         };
         this.language = 'Java';
     }

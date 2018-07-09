@@ -10,20 +10,28 @@ declare var ace: any;  //already this ace is created inside script in angular.js
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
-  public languages: string[] = ["Java","Python"];
+  public languages: string[] = ["Java","Python","C++"];
   editor: any;
   output: string;
   defaultContent = {
     'Java':`public class Example{
-      public static void main(string[] args){
+      public static void main(String[] args){
         // type your code
       }
     }
     `// ` support mutiple lines string
     ,'Python':`class Solution:
-    def example();
+    def example():
+      print("test")
       # Write your Python code here
-    `
+    `,
+    "C++":`#include <iostream>
+     
+    int main()
+    {
+      std::cout << "Hello World!" << std::endl;
+      return 0;
+    }`
   }
   language:string = 'Java';
   sessionId:string;

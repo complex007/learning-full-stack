@@ -5,7 +5,7 @@ const problemService = require('../services/problemService');
 const jsonParser = require('body-parser').json(); // pre-process 
 const nodeRestClient = require('node-rest-client').Client;
 const restClient = new nodeRestClient();
-const EXECUTOR_SERVER_URL = 'http://localhost:5000/build_and_run';
+const EXECUTOR_SERVER_URL = 'http://executor/build_and_run';
 restClient.registerMethod('build_and_run',EXECUTOR_SERVER_URL,'POST');
 
 
@@ -53,6 +53,7 @@ router.post('/build_and_run',jsonParser, ( req, res) => {
             headers:{ 'Content-Type' : 'application/json' }
         },
         ( data, response ) => {
+            console.log(data);
             const text = `Build output: ${data['build']}, execute output: ${data['run']}, error: ${data['error']}`
             res.json(text);
         }
