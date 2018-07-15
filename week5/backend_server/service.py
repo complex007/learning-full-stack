@@ -1,6 +1,7 @@
 # import logging
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCServer
 import operations
+from "./utils" import log
 
 SERVER_HOST = 'localhost'
 SERVER_PORT = 4040

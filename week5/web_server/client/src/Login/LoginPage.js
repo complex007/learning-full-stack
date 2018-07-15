@@ -8,9 +8,9 @@ class LoginPage extends React.Component{
 
         this.state = {
             errors: {
-                summary:"summary",
-                email:'email',
-                password:'password'
+                summary:"",
+                email:'',
+                password:''
             },
             user: {
                 email:'',
@@ -23,10 +23,8 @@ class LoginPage extends React.Component{
         event.preventDefault(); // post or get request will be made by default
         const email = this.state.user.email;
         const password = this.state.user.password;
-        // console.log("email: ", email);
-        // console.log("password: ", password);
         // TODO: post target data 
-        let url = 'http://'+window.location.hostname+":3000/auth/login";
+        let url = `http://${window.location.hostname}:3000/auth/login`;
         let request = new Request(
             url,
             {
@@ -41,18 +39,18 @@ class LoginPage extends React.Component{
                 })
 
             }
-        )
-        fetch(request).then(response=>{
+        );
+        fetch(request).then((response)=>{
             if (response.status === 200) {
                 this.setState({ errors:{}});
-                response.json().then(json => {
+                response.json().then((json) => {
+                    console.dir(json);
                     Auth.authenticateUser(json.token, email);
                     window.location.replace("/");
                 });
-
             }
             else{
-                response.json().then(json => {
+                response.json().then((json) => {
                     const errors = json.errors ? json.errors : {};
                     errors.summary = json.message;
                     this.setState({errors});
@@ -62,7 +60,6 @@ class LoginPage extends React.Component{
 
 
         })
-        Auth.authenticateUser(email,password)
         
 
     }
@@ -72,7 +69,6 @@ class LoginPage extends React.Component{
         const user = this.state.user;
         user[field] = event.target.value;
         this.setState({user});
-
     }
 
     render(){

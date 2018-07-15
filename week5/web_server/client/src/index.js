@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App/App';
 import registerServiceWorker from './registerServiceWorker';
-import SignUpPage from './SignUp/SignUpPage';
+import Base from './Base/Base'
 
-ReactDOM.render(<SignUpPage />, document.getElementById('root'));
+ReactDOM.render(<Base />, document.getElementById('root'));
 registerServiceWorker();

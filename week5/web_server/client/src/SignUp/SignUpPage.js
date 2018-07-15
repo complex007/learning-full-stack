@@ -24,22 +24,48 @@ class SignUpPage extends React.Component {
     const password = this.state.user.password;
     const confirm_password = this.state.user.confirm_password;
 
-    console.log('email:', email);
-    console.log('password:', password);
-    console.log('confirm_password:', confirm_password);
-
-    if (password !== confirm_password) {
+    if ( password !== confirm_password) {
       return;
     }
+    let body = JSON.stringify({
+      email: email,
+      password: password
+    })
 
-    //TODO: Post registeration data.
+    let requestOptions = {
+      method:"POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: body
+    };
+    let url = `http://${window.location.hostname}:3000/auth/signup`;
+        let request = new Request(
+            url,
+            requestOptions
+        );
+        fetch(request).then((response)=>{
+            if (response.status === 200) {
+                this.setState({ errors:{}});
+                response.json().then(() => {
+                    window.location.replace("/login");
+                });
+            }
+            else{
+                response.json().then((json) => {
+                    const errors = json.errors ? json.errors : {};
+                    errors.summary = json.message;
+                    this.setState({errors});
+                });
+            }
+        })
   }
 
   changeUser(event) {
     const field = event.target.name;
     const user = this.state.user;
     user[field] = event.target.value;
-
     this.setState({user});
 
     const errors = this.state.errors;
