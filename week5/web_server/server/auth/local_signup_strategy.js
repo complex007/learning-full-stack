@@ -20,8 +20,10 @@ module.exports = new PassportLocalStrategy(
         .then( (user) => {
             if(!user){
                 const newUser = new User(userData)
-                console.dir(newUser);
-                return newUser.save();
+                return newUser.save()
+                .then( () => {
+                    return done(null);
+                } );
             }
             else{
                 let error = new Error('User Exists');
@@ -29,13 +31,10 @@ module.exports = new PassportLocalStrategy(
                 return done(error);
             }
         } )
-        .then( () => {
-            return done(null);
-        } )
         .catch((err)=>{
-            console.error(err);
             let error = new Error('SignupError');
             error.name = 'SignupError';
+            error.message = err;
             return done(error);
         })
     }

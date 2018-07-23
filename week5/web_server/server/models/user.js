@@ -19,13 +19,14 @@ UserSchema.methods.comparePassword = function(password){
 UserSchema.pre('save',function(){
     const user = this;
     //new user or modified password
-    if (user.isModified('password')){
-        return bcrypt.genSalt((salt)=>{
+    if(user.isModified('password')){
+        return bcrypt.genSalt()
+        .then((salt)=>{
             return bcrypt.hash(user.password,salt);
         })
-        .then(((hash)=>{
+        .then((hash)=>{
             return Promise.resolve(user.password = hash);
-        }))
+        })
     }
 })
 module.exports = Mongodb.model('User',UserSchema);

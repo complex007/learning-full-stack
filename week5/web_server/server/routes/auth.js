@@ -4,8 +4,6 @@ var passport = require('passport');
 const validator = require('validator');
 
 function validatePasswordAndEmail(payload){
-    console.log("auth");
-    console.log(payload);
     const errors = {};
     let isFormValid = false;
     let message = '';
@@ -52,7 +50,6 @@ router.post('/login', function(req, res, next) {
     
     return passport.authenticate('local-login',(error,token, userData)=>{
         if(error){
-
             if( error.name == 'IncorrectCredentialsError'){
                 return res.status(400).json({
                     success: false,
@@ -86,10 +83,8 @@ router.post('/signup', function(req, res,next) {
             errors: validateResult.errors
         });
     }
-    console.dir("pass");
     return passport.authenticate('local-signup', (err) => {
         if (err) {
-          console.log(err);
           if (err.name === 'MongoError' && err.code === 11000) {
             // the 11000 Mongo code is for a duplication email error
             // the 409 HTTP status code is for conflict error
@@ -101,11 +96,10 @@ router.post('/signup', function(req, res,next) {
               }
             });
           }
-    
-          return res.status(400).json({
-            success: false,
-            message: 'Could not process the form.'
-          });
+            return res.status(400).json({
+                success: false,
+                message: 'Could not process the form.'
+            });
         }
     
         return res.status(200).json({
@@ -113,31 +107,6 @@ router.post('/signup', function(req, res,next) {
           message: 'You have successfully signed up! Now you should be able to log in.'
         });
       })(req, res, next);
-    // });
-    // console.dir(passport)
-    // return passport.authenticate('local-signup',( error )=>{
-    //     console.dir(err);
-    //     if(error){
-    //         if( error.name == 'UserExistsError'){
-    //             return res.status(400).json({
-    //                 success: false,
-    //                 message: err.message
-    //             });
-    //         }
-    //         return res.status(400).json({
-    //             success: false,
-    //             message: 'Could not process the form: ' + err.message
-    //         });
-
-    //     }
-    //     else{
-    //         return res.status(200).json({
-    //             success: true,
-    //             message: 'You have successfully signed up! Now you should be able to log in.'
-    //         });
-    //     }
-
-    // });
 });
 
 module.exports = router;

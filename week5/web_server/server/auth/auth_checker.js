@@ -6,7 +6,6 @@ const config = require('../config/config.json');
 // if valid, call "next" to send the news
 // otherwise, return error
 module.exports= (req,res) => {
-    console.log('auth_checker: req: ' + req.headers);
     if (!req.headers.authorization) {
         return res.status(401).end();
     }

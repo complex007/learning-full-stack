@@ -20,27 +20,27 @@ module.exports = new PassportLocalStrategy(
         return User.findOne({email : userData.email})
         .then( (user) => {
             if(user){
-                return user.comparePassword(userData.password,user.password);
+                return user.comparePassword(userData.password,user.password)
+                .then( (isMatched) => {
+                    if (!isMatched) {
+                        // when password not match, set error message
+                        let error = new Error('Incorrect email or password');
+                        error.name = 'IncorrectCredentialsError';
+                        return done(error);
+                    }
+                    const payload = {
+                        sub: user._id // mongodb internal id
+                    };
+                    // create a token string
+                    const token = jwt.sign(payload, config.jwtSecret);
+                    return done(null, token, null);
+                } )
             }
             else{
                 let error = new Error('Incorrect email or password');
                 error.name = 'IncorrectCredentialsError';
                 return done(error);
             }
-        } )
-        .then( (isMatched) => {
-            if (!isMatched) {
-                // when password not match, set error message
-                let error = new Error('Incorrect email or password');
-                error.name = 'IncorrectCredentialsError';
-                return done(error);
-            }
-            const payload = {
-                sub: user._id // mongodb internal id
-            };
-            // create a token string
-            const token = jwt.sign(payload, config.jwtSecret);
-            return done(null, token, null);
         } )
         .catch((err)=>{
             console.error(err);
