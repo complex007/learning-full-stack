@@ -1,0 +1,7 @@
+pymongo
+pika
+jsonrpclib-pelix
+pylint
+requests
+redis
+lxml
