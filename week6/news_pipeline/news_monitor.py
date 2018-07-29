@@ -18,10 +18,20 @@ REDIS_PORT = 6379
 # create a queue and use your own queue
 SCRAPE_NEWS_TASK_QUEUE_URL = "amqp://voqjfkqc:mSMDkJihFxd9Tc8Q4KuED40o1qijFe0r@mustang.rmq.cloudamqp.com/voqjfkqc"
 SCRAPE_NEWS_TASK_QUEUE_NAME = "new-news"
-# SCRAPE_NEWS_TASK_QUEUE_URL = "amqp://mazenwik:z4Eya9CpxocIi_3xw5esvt-RiklxGJi5@spider.rmq.cloudamqp.com/mazenwik"
-# SCRAPE_NEWS_TASK_QUEUE_NAME = "news"
+
 NEWS_SOURCES = [
 'cnn',
+'bbc-news',
+'bbc-sport',
+'bloomberg',
+'cnn',
+'entertainment-weekly',
+'espn',
+'ign',
+'techcrunch',
+'the-new-york-times',
+'the-wall-street-journal',
+'the-washington-post'
 ]
 
 # connect redis_client and cloundAMQP_client
@@ -30,6 +40,7 @@ cloudAMQP_client = CloudAMQPClient(SCRAPE_NEWS_TASK_QUEUE_URL, SCRAPE_NEWS_TASK_
 
 def run():
     while True:
+        log.Info("start monitor")
         news_list = news_api_client.getNewsFromSource(NEWS_SOURCES)
         num_of_new_news = 0
         for news in news_list:

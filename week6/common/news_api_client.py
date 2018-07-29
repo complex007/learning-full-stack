@@ -6,6 +6,7 @@ ARTICILES_API = "articles"
 
 # define constant
 CNN = 'cnn'
+BBCNEWS= 'bbc-news'
 DEFAULT_SOURCE =[CNN]
 SORT_BY_TOP ='top'
 
@@ -18,6 +19,7 @@ def getNewsFromSource(sources=DEFAULT_SOURCE,sortBy=SORT_BY_TOP):
             'apiKey':NEWS_API_KEY,
             'sortBy':sortBy
         }
+        # https://newsapi.org/v1/articles?source=cnn&apiKey=8f21ca9c61c8488ba3f11b6ca40ad002&sortBy=top
         response = requests.get( api, params = payload )
         # response.content is a binary
         res_json = json.loads(response.content.decode('utf-8'))

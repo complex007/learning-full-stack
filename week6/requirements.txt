@@ -5,3 +5,4 @@ pylint
 requests
 redis
 lxml
+newspaper3k
